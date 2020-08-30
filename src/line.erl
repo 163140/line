@@ -8,19 +8,27 @@
 -type line() ::	{line	, point(), point()}	.	%% Прямая на плоскости проходящая заданная двумя точками
 
 %% @doc Возвращает новую прямую заданную координатами точками А и В, точкой А и углом между прямой и абциссой,
--spec new( point(), point() | Angle::number() ) -> line().
+%%			или уравнением прямой
+-spec new( point() | number(), point() | number() ) -> line().
 new(A,B)		->
 	{point, X, Y} = A,														%% Да, это точка
 	if
-		is_number(B)-> 															%% Второй аргумент угол?
-			{point, X+10,	Y + math:tan(B) * 10}	=	C,
-			{line	,	A,		C	};
+		is_number(A) and is_number(B)	-> 						%% Прямая задана уравнением?
+			K	=	A,
+			C1= {point, 0	,	B			},
+			C2=	{point,	10,	A*X+B	},
+			{line, C1, C2};
+		is_number(B)									->						%% Если это не два коэффициента, то второе число это угол
+			C	=	{point, X+10,	Y + math:tan(B) * 10},
+			{line, A, C};
 		true				->
-			{point, X1, Y1} = B								,				%% Второй аргумент - вторая точка
-			true						=	is_number(X1+Y1),
+			{point, X1, Y1} = A						,				%% Оба аргумента - точки
+			{point, X2, Y2} = B						,				%% Оба аргумента - точки
+			true = is_number(X1+Y1+X2+Y2)	,
 			{line	,	A	,	B	}
 end.
 new_test_()	-> [
+	?_assert(new(	1							, 30							) =:= {	line,	{point,  0,30},	{point, 10, 40} }),
 	?_assert(new(	{point,  0, 0},	{point, 10, 10}	)	=:=	{	line,	{point,  0, 0},	{point, 10, 10} }),
 	?_assert(new(	{point, 10,10},	1.86						)	=:=	{ line,	{point, 10,10},	{point, 20, 10+10*math:tan(1.86)} }),
 ].
@@ -80,7 +88,7 @@ intersect_test_() -> [
 	?_assert( intersect({line, {point,0,0}, {point,10,10}},	{line, {point,10,0}, {point,20,10})	=:=	parallel
 ].
 
-
+is_
 
 
 
