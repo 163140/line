@@ -16,7 +16,7 @@ new(A,B)		->
 		is_number(A) and is_number(B)	-> 						%% Прямая задана уравнением?
 			K	=	A,
 			C1= {point, 0	,	B			},
-			C2=	{point,	10,	A*X+B	},
+			C2=	{point,	10,	K*X+B	},
 			{line, C1, C2};
 		is_number(B)									->						%% Если это не два коэффициента, то второе число это угол
 			C	=	{point, X+10,	Y + math:tan(B) * 10},
@@ -28,9 +28,9 @@ new(A,B)		->
 			{line	,	A	,	B	}
 end.
 new_test_()	-> [
-	?_assert(new(	1							, 30							) =:= {	line,	{point,  0,30},	{point, 10, 40} }),
+	?_assert(new(	1							, 30							) =:= {	line,	{point,  0,30},	{point, 40, 10} }),
 	?_assert(new(	{point,  0, 0},	{point, 10, 10}	)	=:=	{	line,	{point,  0, 0},	{point, 10, 10} }),
-	?_assert(new(	{point, 10,10},	1.86						)	=:=	{ line,	{point, 10,10},	{point, 20, 10+10*math:tan(1.86)} }),
+	?_assert(new(	{point, 10,10},	1.86						)	=:=	{ line,	{point, 10,10},	{point, 20, 10+10*math:tan(1.86)} })
 ].
 
 %% @doc Длина отрезка АВ заданного точками А и B.
@@ -58,7 +58,7 @@ find_test_() -> [
 ].
 
 %% @doc Возвращает коэффициенты уравнения прямой заданной двумя точками.
--spec line_eq(Line) -> {'line_eq', number(), number()}.
+-spec line_eq( line() ) -> {'line_eq', number(), number()}.
 line_eq(Line) ->
 	{line	, A1, A2}	=	Line,
 	{point,	X1,	Y1}	=	A1,
@@ -84,6 +84,6 @@ intersect(Line1, Line2) ->
 			parallel
 end.
 intersect_test_() -> [
-	?_assert( intersect({line, {point,0,0}, {point,10,10}}, {line, {point,10,0}, {point, 0,10}) =:= {point,5,5}),
-	?_assert( intersect({line, {point,0,0}, {point,10,10}},	{line, {point,10,0}, {point,20,10})	=:=	parallel
+	?_assert( intersect({line, {point,0,0}, {point,10,10}}, {line, {point,10,0}, {point, 0,10}}) =:= {point,5,5}	),
+	?_assert( intersect({line, {point,0,0}, {point,10,10}},	{line, {point,10,0}, {point,20,10}}) =:=	'parallel'	)
 ].
