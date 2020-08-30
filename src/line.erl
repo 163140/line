@@ -87,9 +87,3 @@ intersect_test_() -> [
 	?_assert( intersect({line, {point,0,0}, {point,10,10}}, {line, {point,10,0}, {point, 0,10}) =:= {point,5,5}),
 	?_assert( intersect({line, {point,0,0}, {point,10,10}},	{line, {point,10,0}, {point,20,10})	=:=	parallel
 ].
-
-is_
-
-
-
-
