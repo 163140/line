@@ -21,8 +21,8 @@ new(A,B)		->
 			{line	,	A	,	B	}
 end.
 new_test_()	-> [
-	?_assert(at_line(	{point,  0, 0},	{point, 10, 10}	)	=:=	{	line,	{point,  0, 0},	{point, 10, 10} }),
-	?_assert(at_line(	{point, 10,10},	1.86						)	=:=	{ line,	{point, 10,10},	{point, 20, 10+10*math:tan(1.86)} }),
+	?_assert(new(	{point,  0, 0},	{point, 10, 10}	)	=:=	{	line,	{point,  0, 0},	{point, 10, 10} }),
+	?_assert(new(	{point, 10,10},	1.86						)	=:=	{ line,	{point, 10,10},	{point, 20, 10+10*math:tan(1.86)} }),
 ].
 
 %% @doc Длина отрезка АВ заданного точками А и B.
@@ -34,7 +34,7 @@ len(Line) ->
 	Dx	=	X2 - X1,
 	Dy	=	Y2 - Y1,
 	math:sqrt(math:pow(Dx, 2) + math:pow(Dy, 2)).
-len_test()->?_assert( {line, {point,10,96}, {point,-22,80} } =:= math:sqrt(1280) ).
+len_test()->?_assert( len({line, {point,10,96}, {point,-22,80} }) =:= math:sqrt(1280) ).
 
 %% @doc Рассчитывает неизвестную координату по известной на заданной прямой
 -spec find('x?' | 'y?', line(), number() )	->	number().
