@@ -1,6 +1,6 @@
 -module(line).
 -include_lib("eunit/include/eunit.hrl").
--export([new/2, len/1, find/3, line_eq/1]).
+-export([new/2, len/1, find/3, line_eq/1, intersect/2]).
 -author("ea1a87").
 
 
@@ -61,6 +61,26 @@ line_eq(Line) ->
 	B		=	Y1 - (K*X1)	,
 	{line_eq,	K, B}.
 line_eq_test() -> ?_assert( line_eq({ line, {point,10,20}, {point,20,50} }) =:= {line_eq, 3, -10} ). 
+
+%% @doc Возвращает точку перечесения двух прямых заданных точками или указывает что прямые параллельны
+-spec intersect( line(), line() )	-> point() | 'parallel'.
+intersect(Line1, Line2) ->
+	{line_eq,	K1,	B1}	=	Line1,
+	{line_eq,	K2,	B2}	=	Line2,
+	if
+		K1 =/= K2	-> 
+			X	=	(B2 - B1) / (K1 - K2),
+			Y	=	find('y?', Line1, X),
+			{point,	X, Y};
+		true			->
+			parallel
+end.
+intersect_test_() -> [
+	?_assert( intersect({line, {point,0,0}, {point,10,10}}, {line, {point,10,0}, {point, 0,10}) =:= {point,5,5}),
+	?_assert( intersect({line, {point,0,0}, {point,10,10}},	{line, {point,10,0}, {point,20,10})	=:=	parallel
+].
+
+
 
 
 
