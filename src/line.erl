@@ -65,10 +65,16 @@ line_eq(Line) ->
 	{line	, A1, A2}	=	Line,
 	{point,	X1,	Y1}	=	A1,
 	{point,	X2,	Y2}	=	A2,
-	Dx	=	X2 - X1			,
-	Dy	=	Y2 - Y1			,
-	K		= Dy/Dx				,
-	B		=	Y1 - (K*X1)	,
+	Dx	=	X2 - X1				,
+	Dy	=	Y2 - Y1				,
+	if
+		Dx == 0		->
+			K = 999999999999999999999999999999999,
+			B = 0;
+		true			->
+			K = Dy/Dx,
+			B		=	Y1 - (K*X1)
+	end,
 	{line_eq,	K, B}.
 line_eq_test() -> ?_assert( line_eq({ line, {point,10,20}, {point,20,50} }) =:= {line_eq, 3.0, -10.0} ). 
 
